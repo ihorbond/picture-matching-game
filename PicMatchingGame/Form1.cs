@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PicMatchingGame
@@ -21,8 +15,10 @@ namespace PicMatchingGame
             "b", "b", "v", "v", "w", "w", "z", "z"
         };
 
-        Label firstClicked = null;
-        Label secondClicked = null;
+        Label firstClicked;
+        Label secondClicked;
+
+        int timeLeft = 45;
 
         public Form1()
         {
@@ -98,8 +94,37 @@ namespace PicMatchingGame
                 }
             }
 
+            timeElapsedTimer.Stop();
             MessageBox.Show("You matched all the icons!", "Congratulations");
             Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            UpdateTimer();
+            (sender as Button).Visible = false;
+            timeElapsedTimer.Start();
+        }
+
+        private void timeElapsedTimer_Tick(object sender, EventArgs e)
+        {
+            if(timeLeft > 0)
+            {
+                timeLeft--;
+                UpdateTimer();
+            }
+            else
+            {
+                timeElapsedTimer.Stop();
+                MessageBox.Show("Time is up!", "Sorry");
+                Close();
+            }
+        }
+
+        private void UpdateTimer()
+        {
+            var timespan = TimeSpan.FromSeconds(timeLeft);
+            timeElapsedLabel.Text = timespan.ToString("mm\\:ss");
         }
     }
 }
